@@ -1,0 +1,20 @@
+{
+  "domain": "wisecloud_home",
+  "name": "云鹿智能门",
+  "version": "1.0.0",
+  "codeowners": [
+    "@james-ok"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "application_credentials"
+  ],
+  "documentation": "https://www.home-assistant.io/integrations/wisecloud_home",
+  "homekit": {},
+  "iot_class": "cloud_push",
+  "requirements": [
+    "websockets"
+  ],
+  "ssdp": [],
+  "zeroconf": []
+}
