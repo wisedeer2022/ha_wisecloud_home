@@ -1,21 +1,21 @@
 {
-  "domain": "wisecloud_home",
-  "name": "云鹿智能门",
-  "version": "v0.1.0",
-  "codeowners": [
-    "@james-ok"
-  ],
-  "issue_tracker": "https://github.com/wisedeer2022/ha_wisecloud_home/issues",
-  "config_flow": true,
-  "dependencies": [
-    "application_credentials"
-  ],
-  "documentation": "https://github.com/wisedeer2022/ha_wisecloud_home",
-  "homekit": {},
-  "iot_class": "cloud_push",
-  "requirements": [
-    "websockets"
-  ],
-  "ssdp": [],
-  "zeroconf": []
+    "domain": "wisecloud_home",
+    "name": "云鹿智能门",
+    "codeowners": [
+        "@james-ok"
+    ],
+    "config_flow": true,
+    "dependencies": [
+        "application_credentials"
+    ],
+    "documentation": "https://github.com/wisedeer2022/ha_wisecloud_home",
+    "homekit": {},
+    "iot_class": "cloud_push",
+    "issue_tracker": "https://github.com/wisedeer2022/ha_wisecloud_home/issues",
+    "requirements": [
+        "websockets"
+    ],
+    "ssdp": [],
+    "version": "v0.1.0",
+    "zeroconf": []
 }
