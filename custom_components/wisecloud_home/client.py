@@ -9,14 +9,14 @@ class WiseCloudClient:
 
 
     async def get_devices(self):
-        return await self._api.request("GET","open/api/devices")
+        return await self._api.request("GET","/open/api/devices")
 
     async def get_models(self, product_id: str):
-        modelStr = await self._api.request("GET","open/api/devices/models/" + product_id)
+        modelStr = await self._api.request("GET","/open/api/devices/models/" + product_id)
         return json.loads(modelStr)
 
     async def get_all_status(self, device_iot_id: str):
-        statusStr = await self._api.request("GET","open/api/devices/status/" + device_iot_id)
+        statusStr = await self._api.request("GET","/open/api/devices/status/" + device_iot_id)
         stauts = json.loads(statusStr)
 
         # print(f"get_all_status:{stauts}")
@@ -28,5 +28,5 @@ class WiseCloudClient:
             "deviceNotifyEnable": notify_device,
             "data": json.dumps(control_data),
         }
-        await self._api.request("PUT","open/api/devices/control/" + device_iot_id, json=param)
+        await self._api.request("PUT","/open/api/devices/control/" + device_iot_id, json=param)
 
