@@ -51,7 +51,7 @@ class WiseCloudAPI(ABC):
         timestamp = int(time.time())
         nonce = self.generate_nonce()
         top = f"{method} {url} {timestamp} {nonce}\n".encode()
-        json_data = kwargs.get("json")
+        json_data = kwargs.get("data")
         body = json.dumps(json_data).encode() if json_data else b''
         data = top + body
         signature = base64.b64encode(hmac.new(API_SIGN_KEY, data, hashlib.sha256).digest())
@@ -64,6 +64,7 @@ class WiseCloudAPI(ABC):
             'Signature': signature.decode()
         })
 
+        kwargs["data"] = json.dumps(json_data)
         response = await self._websession.request(
             method, f"{API_BASE_URL}{url}", **kwargs, headers=headers,
         )

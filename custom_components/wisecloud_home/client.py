@@ -28,5 +28,5 @@ class WiseCloudClient:
             "deviceNotifyEnable": notify_device,
             "data": json.dumps(control_data),
         }
-        await self._api.request("PUT","/open/api/devices/control/" + device_iot_id, json=param)
+        await self._api.request("PUT","/open/api/devices/control/" + device_iot_id, data=param)
 
