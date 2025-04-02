@@ -33,12 +33,20 @@ class WiseCloudText(TextEntity):
         self._device_id = device_id
         self._prop_id = prop_id
         self._attr_native_value = min
-        self._min_value = int(min)
-        self._max_value = int(max)
+        self._attr_native_min = int(min)
+        self._attr_native_max = int(max)
         self._attr_unique_id = f"{device_id}-{prop_id}"
         self._attr_name = name
         self._attr_device_info = device_info
 
+    async def async_set_value(self, value: str) -> None:
+        """Set new value."""
+        self._attr_native_value = value
+        control_data = {
+            self._prop_id: self._attr_native_value
+        }
+        await self._client.device_control(self._device_id, control_data, 1)
+        self.async_write_ha_state()
 
     async def sync_state(self, value):
         self._attr_native_value = value

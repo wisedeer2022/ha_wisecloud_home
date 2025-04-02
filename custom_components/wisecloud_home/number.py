@@ -28,37 +28,27 @@ class WiseCloudNumber(NumberEntity):
         self._client = client
         self._device_id = device_id
         self._prop_id = prop_id
-        self._value = min
-        self._min_value = int(min)
-        self._max_value = int(max)
+        self._attr_native_value = min
+        self._attr_native_min_value = int(min)
+        self._attr_native_max_value = int(max)
         self._attr_unique_id = f"{device_id}-{prop_id}"
         self._attr_name = name
         self._attr_device_info = device_info
 
 
-    @property
-    def value(self):
-        return self._value
-
-    @property
-    def min_value(self):
-        return self._min_value
-
-    @property
-    def max_value(self):
-        return self._max_value
-
-    async def async_set_value(self, value):
-        if self._min_value <= value <= self._max_value:
-            self._value = value
+    async def async_set_native_value(self, value: float) -> None:
+        """Set new value."""
+        if self._attr_native_min_value <= value <= self._attr_native_max_value:
+            self._attr_native_value = value
             control_data = {
-                self._prop_id: self._value
+                self._prop_id: self._attr_native_value
             }
             await self._client.device_control(self._device_id, control_data, 1)
-            self.async_write_ha_state()
+        self.async_write_ha_state()
+
 
 
     async def sync_state(self, state):
-        if self._min_value <= state <= self._max_value:
-            self._value = state
+        if self._attr_native_min_value <= state <= self._attr_native_max_value:
+            self._attr_native_value = state
             self.async_write_ha_state()

@@ -35,8 +35,9 @@ git clone https://github.com/wisedeer2022/ha_wisecloud_home.git
 ```
 cd ha_wisecloud_home
 
-./install.sh /config
+sh ./install.sh /config
 ```
+完成后重启HA，可在Home Assistant平台中“开发者工具 -> YAML配置 -> 重新启动”操作。
 
 此方法推荐使用，如需更新至特定版本，切换至相应的 Tag 即可。例如，更新至 v2.0.0 版本：
 
@@ -49,8 +50,9 @@ git fetch
 
 git checkout v2.0.0
 
-./install.sh /config
+sh ./install.sh /config
 ```
+完成后重启HA，可在Home Assistant平台中“开发者工具 -> YAML配置 -> 重新启动”操作。
 
 ### 方法 2: HACS
 

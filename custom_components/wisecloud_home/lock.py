@@ -1,9 +1,8 @@
 import logging
 
-from homeassistant.components.lock import LockEntity, LockEntityFeature
+from homeassistant.components.lock import LockEntity, LockEntityFeature, LockState
 from homeassistant.helpers.device_registry import DeviceInfo
 from .const import DOMAIN
-from homeassistant.const import STATE_LOCKED, STATE_UNLOCKED
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +40,7 @@ class WiseCloudLock(LockEntity):
     def state(self):
         if self._is_locked is None:
             return None
-        return STATE_LOCKED if self._is_locked else STATE_UNLOCKED
+        return LockState.LOCKED if self._is_locked else LockState.UNLOCKED
 
     @property
     def is_locked(self):
