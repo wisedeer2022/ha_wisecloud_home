@@ -20,8 +20,17 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         print(json.dumps(events))
         for event in events:
             mapping = event["mapping"]
-            lock = WiseCloudEvent(hass,device['deviceIotId'], event["id"], event["name"], mapping, device_info)
-            entities.append(lock)
+            event_entity = WiseCloudEvent(hass,device['deviceIotId'], event["id"], event["name"], mapping, device_info)
+            entities.append(event_entity)
+
+        pseudo_mapping = {
+            "inside_unlock": "门内开锁",
+            "outside_unlock": "门外开锁",
+            "unknown_unlock": "开锁(内外未知)",
+            "locked":"上锁"
+        }
+        lock_event_entity = WiseCloudEvent(hass, device['deviceIotId'], "pseudo_lock_event", "门锁事件", pseudo_mapping, device_info)
+        entities.append(lock_event_entity)
 
     hass.data[DOMAIN]["event_entities"] = entities
     # 添加所有实体

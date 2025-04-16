@@ -125,6 +125,19 @@ class WSClient:
                         lock_entity = self.hass.data[DOMAIN]["lock_entities"][0]
                         await lock_entity.sync_state(True if event_type != 2 else False)
 
+                        # 处理虚构的门锁事件
+                        entity_id = entity_registry.async_get_entity_id('event', DOMAIN,
+                                                                        f"{deviceIotId}-pseudo_lock_event")
+                        if entity_id:
+                            event_entities = self.hass.data[DOMAIN]["event_entities"]
+                            for event_entity in event_entities:
+                                if event_entity.entity_id == entity_id:
+                                    event_type = self.parse_pseudo_lock_event_type(extra)
+                                    if event_type is not None:
+                                        await event_entity.trigger(str(event_type), message)
+                                    break
+
+
 
         except json.JSONDecodeError:
             print(f"Failed to decode message: {message}")
@@ -139,3 +152,19 @@ class WSClient:
         elif iot_event_id == "power_supply_event":
             event_type = extra["power_supply_mode"]
         return event_type
+
+
+    def parse_pseudo_lock_event_type(self, extra):
+        print(extra)
+        lock_action = extra['lock_action']
+        if lock_action == 1:
+            return "locked"
+        elif lock_action == 2:
+            operation_position = extra['operation_position']
+            if operation_position == 1:
+                return "inside_unlock"
+            elif operation_position == 2:
+                return "outside_unlock"
+            else:
+                return "unknown_unlock"
+        return None

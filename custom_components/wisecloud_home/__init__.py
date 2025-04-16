@@ -59,9 +59,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: New_NameConfigEntry) -> 
         # 提取设备信息并构建 DeviceInfo
         device_info = DeviceInfo(
             identifiers={(DOMAIN, device['deviceIotId'])},
-            name=device.get('noteName', device['noteName']),
-            manufacturer=device.get('manufacturer', device_information["manufacturer"]),
-            model=device.get('model', device_information["model"]),
+            name=device['noteName'],
+            manufacturer=device_information.get('manufacturer', 'Yunlu Technology Co.Ltd'),
+            model=device_information["model"],
             sw_version=device.get('sw_version', device_information["main_version"]),
         )
         # 注册设备
