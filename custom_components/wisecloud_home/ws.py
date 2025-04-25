@@ -125,6 +125,9 @@ class WSClient:
                         lock_entity = self.hass.data[DOMAIN]["lock_entities"][0]
                         await lock_entity.sync_state(True if event_type != 2 else False)
 
+                        sensor_entity = self.hass.data[DOMAIN]["sensor_entities"][0]
+                        await sensor_entity.sync_state(self.parse_pseudo_unlock_method_k(extra))
+
                         # 处理虚构的门锁事件
                         entity_id = entity_registry.async_get_entity_id('event', DOMAIN,
                                                                         f"{deviceIotId}-pseudo_lock_event")
@@ -168,3 +171,12 @@ class WSClient:
             else:
                 return "unknown_unlock"
         return None
+
+    def parse_pseudo_unlock_method_k(self, extra):
+        lock_action = extra['lock_action']
+        k = None
+        if lock_action == 1:
+            k = 100
+        elif lock_action == 2:
+            k = extra["operation_method"]
+        return k
