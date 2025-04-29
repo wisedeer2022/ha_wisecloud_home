@@ -15,8 +15,21 @@ async def async_setup_entry(hass, entry, async_add_entities):
         switchs = device["switchs"]
         for switch in switchs:
             define = switch["define"]
-            switchEntity = WiseCloudSwitch(client, device["deviceIotId"], switch["id"], switch["name"], define["mapping"], device_info)
+            switchEntity = WiseCloudSwitch(client, device["deviceIotId"], switch["id"], switch["name"], device_info)
             entities.append(switchEntity)
+
+        insideUnlockEntity = WiseCloudSwitch(client, device["deviceIotId"], "inside_unlock", "门内开锁", device_info, True)
+        entities.append(insideUnlockEntity)
+
+        outsideUnlockEntity = WiseCloudSwitch(client, device["deviceIotId"], "outside_unlock", "门外开锁", device_info, True)
+        entities.append(outsideUnlockEntity)
+
+        unkownUnlockEntity = WiseCloudSwitch(client, device["deviceIotId"], "unknown_unlock", "未知开锁", device_info, True)
+        entities.append(unkownUnlockEntity)
+
+        lockedEntity = WiseCloudSwitch(client, device["deviceIotId"], "locked", "上锁", device_info,
+                                             True)
+        entities.append(lockedEntity)
 
     hass.data[DOMAIN]["switch_entities"] = entities
     # 添加所有实体
@@ -25,17 +38,19 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 class WiseCloudSwitch(SwitchEntity):
-    def __init__(self, client, device_id: str, prop_id, name, mapping, device_info):
+    def __init__(self, client, device_id: str, prop_id, name, device_info, readOnly=False):
         self._client = client
         self._device_id = device_id
         self._prop_id = prop_id
-        self._mapping = mapping
         self._attr_unique_id = f"{device_id}-{prop_id}"
         self._attr_name = name
         self._attr_device_info = device_info
+        self._readOnly = readOnly
 
     async def async_turn_on(self, **kwargs):
         """Turn the switch on."""
+        if self._readOnly:
+            return
         self._attr_is_on = True
         control_data = {
             self._prop_id: 1 if self._attr_is_on else 0
@@ -45,6 +60,8 @@ class WiseCloudSwitch(SwitchEntity):
 
     async def async_turn_off(self, **kwargs):
         """Turn the switch off."""
+        if self._readOnly:
+            return
         self._attr_is_on = False
         control_data = {
             self._prop_id: 1 if self._attr_is_on else 0

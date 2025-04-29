@@ -128,6 +128,25 @@ class WSClient:
                         sensor_entity = self.hass.data[DOMAIN]["sensor_entities"][0]
                         await sensor_entity.sync_state(self.parse_pseudo_unlock_method_k(extra))
 
+                        switch_entity_type = self.parse_pseudo_lock_event_type(extra)
+                        if switch_entity_type is not None:
+                            switch_entities = self.hass.data[DOMAIN]["switch_entities"]
+
+                            for entity_type in ["locked", "inside_unlock", "outside_unlock", "unknown_unlock"]:
+                                entity_id = entity_registry.async_get_entity_id('switch', DOMAIN,
+                                                                                f"{deviceIotId}-{entity_type}")
+                                temp_entity = None
+                                for switch_entity in switch_entities:
+                                    if switch_entity.entity_id == entity_id:
+                                        temp_entity = switch_entity
+                                        continue
+
+                                if temp_entity is not None:
+                                    if entity_type == switch_entity_type:
+                                        await temp_entity.sync_state(1)
+                                    else:
+                                        await temp_entity.sync_state(0)
+
                         # 处理虚构的门锁事件
                         entity_id = entity_registry.async_get_entity_id('event', DOMAIN,
                                                                         f"{deviceIotId}-pseudo_lock_event")
