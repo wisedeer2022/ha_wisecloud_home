@@ -1,5 +1,6 @@
 {
   "name": "Wisecloud Home",
+  "country": "CN",
   "homeassistant": "2024.4.4",
   "render_readme": true
 }
