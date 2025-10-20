@@ -137,6 +137,16 @@ class WSClient:
                                         await event_entity.trigger(str(event_type), message)
                                     break
 
+                        # 处理虚构的门锁日志
+                        entity_id = entity_registry.async_get_entity_id('sensor', DOMAIN,
+                                                                        f"{deviceIotId}-lock_log")
+                        if entity_id:
+                            sensor_entities = self.hass.data[DOMAIN]["sensor_entities"]
+                            for sensor_entity in sensor_entities:
+                                if sensor_entity.entity_id == entity_id:
+                                    await sensor_entity.sync_state(message)
+                                    break
+
 
 
         except json.JSONDecodeError:

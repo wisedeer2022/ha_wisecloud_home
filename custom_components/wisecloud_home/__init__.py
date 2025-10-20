@@ -19,6 +19,7 @@ PLATFORMS: list[Platform] = [
     Platform.TEXT,
     Platform.SWITCH,
     Platform.NUMBER,
+    Platform.SENSOR
 ]
 
 type New_NameConfigEntry = ConfigEntry[api.WiseCloudAPI]
